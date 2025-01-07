@@ -3,6 +3,26 @@
 
 import random
 
+# Function to get the cell color based on value
+def get_color(value):
+    colors = {
+        0: "#CCC0B3",   # Empty cell - neutral beige
+        2: "#EEE4DA",   # Light beige
+        4: "#EDE0C8",   # Slightly darker beige
+        8: "#F2B179",   # Light orange
+        16: "#F59563",  # Soft orange
+        32: "#F67C5F",  # Bright orange
+        64: "#F65E3B",  # Darker orange
+        128: "#EDCF72", # Golden yellow
+        256: "#EDCC61", # Rich golden yellow
+        512: "#EDC850", # Deep gold
+        1024: "#EDC53F", # Vibrant gold
+        2048: "#E8BE2E", # Radiant gold with more depth
+        4096: "#E8A700", # Bold golden-yellow for higher tiles
+        8192: "#E59500", # Orange-gold for very high tiles
+    }
+    return colors.get(value, "#CCC0B3")
+
 # Initialize the game grid with zeros and add a new '2' tile to start the game
 def start_game():
     mat = [[0] * 4 for _ in range(4)]
@@ -101,12 +121,12 @@ import tkinter as tk
 # Create the GUI window
 root = tk.Tk()
 root.title("2048 Game")
-root.geometry("400x400")
+root.geometry("500x600")
 root.resizable(False, False)
 
-# Create a frame to hold the grid
-frame = tk.Frame(root)
-frame.grid()
+# Create a frame to hold the grid and center it
+frame = tk.Frame(root, bg="black", borderwidth=2, relief="solid")
+frame.place(relx=0.5, rely=0.3, anchor="center")
 
 # Create a 4x4 grid of labels
 grid_labels = [[tk.Label(frame, text="", font=("Helvetica", 24), width=4, height=2, borderwidth=1, relief="solid") for _ in range(4)] for _ in range(4)]
@@ -119,32 +139,16 @@ for i in range(4):
 # Initialize the game
 mat = start_game()
 
+# Instructions label
+instructions = tk.Label(root, text="Use W/A/S/D keys to move tiles. Combine tiles to reach 2048!", font=("Helvetica", 14), wraplength=400)
+instructions.place(relx=0.5, rely=0.7, anchor="center")
+
 # Function to update the grid visually
 def update_grid(mat):
     for i in range(4):
         for j in range(4):
             value = mat[i][j]
             grid_labels[i][j].config(text=str(value) if value != 0 else "", bg=get_color(value))
-
-# Function to get the cell color based on value
-def get_color(value):
-    colors = {
-        0: "#CCC0B3",   # Empty cell - neutral beige
-        2: "#EEE4DA",   # Light beige
-        4: "#EDE0C8",   # Slightly darker beige
-        8: "#F2B179",   # Light orange
-        16: "#F59563",  # Soft orange
-        32: "#F67C5F",  # Bright orange
-        64: "#F65E3B",  # Darker orange
-        128: "#EDCF72", # Golden yellow
-        256: "#EDCC61", # Rich golden yellow
-        512: "#EDC850", # Deep gold
-        1024: "#EDC53F", # Vibrant gold
-        2048: "#E8BE2E", # Radiant gold with more depth
-        4096: "#E8A700", # Bold golden-yellow for higher tiles
-        8192: "#E59500", # Orange-gold for very high tiles
-    }
-    return colors.get(value, "#CCC0B3")
 
 # Handle key presses
 def handle_key(event):
